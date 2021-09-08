@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.patna.multhithreading.thread_basic.SearchBookRunnable;
 import com.patna.multhithreading.handler.SimpleWorker;
+import com.patna.multhithreading.threadpool.Activity;
+import com.patna.multhithreading.threadpool.RemoteService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         resultTextView = findViewById(R.id.result_tv);
         searchButton = findViewById(R.id.search_bt);
 
-        searchButton.setOnClickListener(view ->{
+        /*searchButton.setOnClickListener(view ->{
             String query = searchEditText.getText().toString().trim();
 
             SearchBookRunnable searchBookRunnable = new SearchBookRunnable(this,query);
@@ -78,9 +81,17 @@ public class MainActivity extends AppCompatActivity {
             Message message = Message.obtain();
             message.obj = "Task 3 Completed";
             handler.sendMessage(message);
+        });*/
+
+        RemoteService remoteService = new RemoteService();
+        remoteService.getRecentActivities(activities -> {
+            for (Activity activity : activities){
+                Log.i(MainActivity.class.getSimpleName(),activity.toString());
+            }
         });
 
-
+        Log.i(MainActivity.class.getSimpleName(),"Ends");
+        remoteService.stop();
     }
 
     @Override
